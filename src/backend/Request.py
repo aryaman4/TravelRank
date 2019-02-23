@@ -6,7 +6,7 @@ amadeus = Client(
 )
 
 class Request(object):
-    def __init__(self, current_city = 'NONE', travel_city = 'NONE', ratings = 'NONE', num_people = '1', st_date = 'NONE', end_date = 'NONE',max_fbudget = 'NONE', max_hbudget = 'NONE', currency = 'USD'):
+    def __init__(self, current_city = None, travel_city = None, ratings = 'NONE', num_people = '1', st_date = None, end_date = None,max_fbudget = None, max_hbudget = None, currency = 'USD'):
         self.current = current_city
         self.travel = travel_city
         self.ratings = ratings
@@ -23,16 +23,20 @@ class Request(object):
             latitude=lat,
             longitude=long
         )
-        self.travel = request.data[0]['address']['cityCode']
+        for i in range(len(request.data)):
+            if request.data[i]['address']['cityName'].lower() == self.travel.lower():
+                self.travel = request.data[i]['address']['cityCode']
+        if (len(self.travel) > 3):
+            self.travel = request.data[0]['address']['cityCode']
         request = amadeus.shopping.hotel_offers.get(
             cityCode= self.travel,
             checkInDate = self.st_date,
             checkOutDate = self.end_date,
             currency = self.currency,
             adults = self.num_people,
-            ratings= self.ratings,
-            radius = 20,
-            priceRange = self.max_hbudget
+            ratings= self.ratings or '',
+            radius = 50,
+            priceRange = self.max_hbudget or ''
         )
         return request.data
     def get_flight(self):
@@ -40,10 +44,10 @@ class Request(object):
             origin = self.current,
             destination = self.travel,
             departureDate = self.st_date,
-            returnDate = self.end_date,
+            returnDate = self.end_date or '',
             adults = self.num_people,
             currency = self.currency,
-            maxPrice = self.max_fbudget
+            maxPrice = self.max_fbudget or ''
         )
         return request.data
     def get_nearby_airports(self):
@@ -53,6 +57,6 @@ class Request(object):
             longitude = long
         )
         return [request.data[i]['iataCode'] for i in range(len(request.data))]
-req = Request(current_city='Chicago', travel_city='New York City', num_people='2', st_date='2019-03-16', end_date='2019-03-20', ratings='5,4,3,2', max_fbudget='300')
+req = Request(current_city='Chicago', travel_city='Los Angeles', num_people='2', st_date='2019-04-10', end_date='2019-04-15', ratings='5,4,3,2', max_fbudget='300')
 
 print(req.get_hotels())

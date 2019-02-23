@@ -1,5 +1,5 @@
-from Request import Request
-from utils import get_formatted_date
+from src.backend.Request import Request
+from src.backend.utils import get_formatted_date
 
 class Filter(object):
 

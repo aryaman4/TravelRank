@@ -1,5 +1,5 @@
 from amadeus import Client
-
+from src.backend.utils import geocode_city
 amadeus = Client(
     client_id='ihBJLkd2SDQFIp7MvlHDcAExAFaBiN1n',
     client_secret='XJ2JSLSG0bL5Mky6'
@@ -40,9 +40,13 @@ class Request(object):
             maxPrice = self.max_fbudget
         )
         return request.data
+    def get_nearby_airports(self):
+        lat, long = geocode_city(self.current)
+        request = amadeus.reference_data.locations.airports.get(
+            latitude = lat,
+            longitude = long
+        )
+        return request.data[0]['iataCode']
+req = Request(current_city='Chicago', travel_city='NYC', num_people='2', st_date='2019-03-16', end_date='2019-03-20', ratings='5,4,3', max_hbudget='300', max_fbudget='300')
 
-req = Request(current_city='ORD', travel_city='NYC', num_people='2', st_date='2019-03-16', end_date='2019-03-20', ratings='5,4,3', max_hbudget='300', max_fbudget='300')
-
-print(req.get_hotels()[0]['offers'][0]['price']['total'])
-
-print(req.get_flight())
+print(req.get_nearby_airports())

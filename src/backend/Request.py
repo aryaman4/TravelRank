@@ -1,4 +1,4 @@
-from amadeus import Client, ResponseError
+from amadeus import Client
 
 amadeus = Client(
     client_id='ihBJLkd2SDQFIp7MvlHDcAExAFaBiN1n',
@@ -43,6 +43,6 @@ class Request(object):
 
 req = Request(current_city='ORD', travel_city='NYC', num_people='2', st_date='2019-03-16', end_date='2019-03-20', ratings='5,4,3', max_hbudget='300', max_fbudget='300')
 
-print(req.get_hotels())
+print(req.get_hotels()[0]['offers'][0]['price']['total'])
 
 print(req.get_flight())

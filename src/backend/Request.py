@@ -18,15 +18,21 @@ class Request(object):
         self.max_fbudget = max_fbudget
 
     def get_hotels(self):
+        lat, long = geocode_city(self.travel)
+        request = amadeus.reference_data.locations.airports.get(
+            latitude=lat,
+            longitude=long
+        )
+        self.travel = request.data[0]['address']['cityCode']
         request = amadeus.shopping.hotel_offers.get(
             cityCode= self.travel,
             checkInDate = self.st_date,
             checkOutDate = self.end_date,
-            numPeople = int(self.num_people) // 3,
             currency = self.currency,
             adults = self.num_people,
             ratings= self.ratings,
-            priceRange = '0-' + self.max_hbudget
+            radius = 20,
+            priceRange = self.max_hbudget
         )
         return request.data
     def get_flight(self):
@@ -46,7 +52,7 @@ class Request(object):
             latitude = lat,
             longitude = long
         )
-        return request.data[0]['iataCode']
-req = Request(current_city='Chicago', travel_city='NYC', num_people='2', st_date='2019-03-16', end_date='2019-03-20', ratings='5,4,3', max_hbudget='300', max_fbudget='300')
+        return [request.data[i]['iataCode'] for i in range(len(request.data))]
+req = Request(current_city='Chicago', travel_city='New York City', num_people='2', st_date='2019-03-16', end_date='2019-03-20', ratings='5,4,3,2', max_fbudget='300')
 
-print(req.get_nearby_airports())
+print(req.get_hotels())

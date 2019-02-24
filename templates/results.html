@@ -6,9 +6,9 @@ aMaDeUs
 {% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-light bg-light">
+<nav class="navbar navbar-light bg-light sticky-top" style="background-color:#e3f2fd">
   <a class="navbar-brand" href="#">
-    <img src="/docs/4.3/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+    <img src="images/logo.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
     Bootstrap
   </a>
 </nav>
@@ -21,6 +21,7 @@ aMaDeUs
 			{{ wtf.form_field(form.people) }}
 			{{ wtf.form_field(form.checkin) }}
 			{{ wtf.form_field(form.checkout) }}
+			{{ wtf.form_field(form.rating) }}
 			<button type="button" class="btn btn-primary">Search</button>
 		</dl>
 	</form>

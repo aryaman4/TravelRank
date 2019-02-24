@@ -49,6 +49,9 @@ def get_flight_price(offer):
 def get_hotel_price(offer):
     return offer['offers'][0]['price']['total']
 
+def get_hotel_rating(offer):
+    return offer['hotel']['rating']
+
 def convert_to_float(time_str):
     days = int(time_str[0: time_str.find("DT")])
     hours = int(time_str[time_str.find("DT") + 2: time_str.find("H")])

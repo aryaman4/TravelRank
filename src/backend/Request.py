@@ -21,11 +21,17 @@ class Request(object):
     def set_travel_city(self, city):
         self.travel = city
 
+    def set_max_fbudget(self, fbudget):
+        self.max_fbudget = fbudget
+
+    def set_max_hbudget(self, hbudget):
+        self.max_hbudget = hbudget
+
     def get_hotels(self):
-        lat, long = geocode_city(self.travel)
+        lat, longi = geocode_city(self.travel)
         request = amadeus.reference_data.locations.airports.get(
             latitude=lat,
-            longitude=long
+            longitude=longi
         )
         for i in range(len(request.data)):
             if request.data[i]['address']['cityName'].lower() == self.travel.lower():
@@ -43,21 +49,22 @@ class Request(object):
             priceRange = self.max_hbudget or ''
         )
         return request.data
+
     def get_flight(self):
-        lat, long = geocode_city(self.current)
+        lat, longi = geocode_city(self.current)
         request = amadeus.reference_data.locations.airports.get(
             latitude=lat,
-            longitude=long
+            longitude=longi
         )
         for i in range(len(request.data)):
             if request.data[i]['address']['cityName'].lower() == self.current.lower():
                 self.current = request.data[i]['address']['cityCode']
         if (len(self.current) > 3):
             self.current = request.data[0]['address']['cityCode']
-        lat, long = geocode_city(self.travel)
+        lat, longi = geocode_city(self.travel)
         request = amadeus.reference_data.locations.airports.get(
             latitude=lat,
-            longitude=long
+            longitude=longi
         )
         self.travel = request.data[0]['address']['cityCode']
         request = amadeus.shopping.flight_offers.get(
@@ -67,17 +74,20 @@ class Request(object):
             returnDate = self.end_date or '',
             adults = self.num_people,
             currency = self.currency,
-            maxPrice = self.max_fbudget*2
+            maxPrice = self.max_fbudget*int(self.num_people)
         )
         return request.data
+
     def get_nearby_airports(self):
-        lat, long = geocode_city(self.current)
+        lat, longi = geocode_city(self.current)
         request = amadeus.reference_data.locations.airports.get(
             latitude = lat,
-            longitude = long
+            longitude = longi
         )
         return [request.data[i]['iataCode'] for i in range(len(request.data))]
-    def get_all_cities(self):
+
+    @staticmethod
+    def get_all_cities():
         df = pd.read_csv('citylist.csv')
         city = df['name']
 

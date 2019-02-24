@@ -1,12 +1,12 @@
 from amadeus import Client
-
+from src.backend.utils import geocode_city
 amadeus = Client(
     client_id='ihBJLkd2SDQFIp7MvlHDcAExAFaBiN1n',
     client_secret='XJ2JSLSG0bL5Mky6'
 )
 
 class Request(object):
-    def __init__(self, current_city = 'NONE', travel_city = 'NONE', ratings = 'NONE', num_people = '1', st_date = 'NONE', end_date = 'NONE',max_fbudget = 'NONE', max_hbudget = 'NONE', currency = 'USD'):
+    def __init__(self, current_city = None, travel_city = None, ratings = 'NONE', num_people = '1', st_date = None, end_date = None,max_fbudget = None, max_hbudget = None, currency = 'USD'):
         self.current = current_city
         self.travel = travel_city
         self.ratings = ratings
@@ -18,31 +18,63 @@ class Request(object):
         self.max_fbudget = max_fbudget
 
     def get_hotels(self):
+        lat, long = geocode_city(self.travel)
+        request = amadeus.reference_data.locations.airports.get(
+            latitude=lat,
+            longitude=long
+        )
+        for i in range(len(request.data)):
+            if request.data[i]['address']['cityName'].lower() == self.travel.lower():
+                toTravel = request.data[i]['address']['cityCode']
+        if (len(self.travel) > 3):
+            toTravel = request.data[0]['address']['cityCode']
         request = amadeus.shopping.hotel_offers.get(
-            cityCode= self.travel,
+            cityCode= toTravel,
             checkInDate = self.st_date,
             checkOutDate = self.end_date,
-            numPeople = int(self.num_people) // 3,
             currency = self.currency,
             adults = self.num_people,
-            ratings= self.ratings,
-            priceRange = '0-' + self.max_hbudget
+            ratings= self.ratings or '',
+            radius = 50,
+            priceRange = self.max_hbudget or ''
         )
         return request.data
     def get_flight(self):
+        lat, long = geocode_city(self.current)
+        request = amadeus.reference_data.locations.airports.get(
+            latitude=lat,
+            longitude=long
+        )
+        for i in range(len(request.data)):
+            if request.data[i]['address']['cityName'].lower() == self.current.lower():
+                self.current = request.data[i]['address']['cityCode']
+        if (len(self.current) > 3):
+            self.current = request.data[0]['address']['cityCode']
+        lat, long = geocode_city(self.travel)
+        request = amadeus.reference_data.locations.airports.get(
+            latitude=lat,
+            longitude=long
+        )
+        self.travel = request.data[0]['address']['cityCode']
         request = amadeus.shopping.flight_offers.get(
             origin = self.current,
             destination = self.travel,
             departureDate = self.st_date,
-            returnDate = self.end_date,
+            returnDate = self.end_date or '',
             adults = self.num_people,
             currency = self.currency,
-            maxPrice = self.max_fbudget
+            maxPrice = self.max_fbudget*2
         )
         return request.data
+    def get_nearby_airports(self):
+        lat, long = geocode_city(self.current)
+        request = amadeus.reference_data.locations.airports.get(
+            latitude = lat,
+            longitude = long
+        )
+        return [request.data[i]['iataCode'] for i in range(len(request.data))]
+req = Request(current_city='Chicago', travel_city='Knoxville', num_people='2', st_date='2019-04-10', end_date='2019-04-15', ratings='5,4,3,2', max_fbudget=500)
 
-req = Request(current_city='ORD', travel_city='NYC', num_people='2', st_date='2019-03-16', end_date='2019-03-20', ratings='5,4,3', max_hbudget='300', max_fbudget='300')
-
-print(req.get_hotels()[0]['offers'][0]['price']['total'])
+print(req.get_hotels())
 
 print(req.get_flight())

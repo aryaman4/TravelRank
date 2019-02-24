@@ -1,13 +1,18 @@
 from amadeus import Client
 from src.backend.utils import geocode_city
 import pandas as pd
+
+API_KEY = 'ihBJLkd2SDQFIp7MvlHDcAExAFaBiN1n' #replace for use
+API_SECRET = 'XJ2JSLSG0bL5Mky6'
 amadeus = Client(
-    client_id='ihBJLkd2SDQFIp7MvlHDcAExAFaBiN1n',
-    client_secret='XJ2JSLSG0bL5Mky6'
+    client_id=API_KEY,
+    client_secret=API_SECRET
 )
 
+
 class Request(object):
-    def __init__(self, current_city = None, travel_city = None, ratings = 'NONE', num_people = '1', st_date = None, end_date = None,max_fbudget = None, max_hbudget = None, currency = 'USD'):
+    def __init__(self, current_city=None, travel_city=None, ratings='NONE',
+                 num_people='1', st_date=None, end_date=None, max_fbudget=None, max_hbudget=None, currency='USD'):
         self.current = current_city
         self.travel = travel_city
         self.ratings = ratings
@@ -59,7 +64,7 @@ class Request(object):
         for i in range(len(request.data)):
             if request.data[i]['address']['cityName'].lower() == self.current.lower():
                 self.current = request.data[i]['address']['cityCode']
-        if (len(self.current) > 3):
+        if len(self.current) > 3:
             self.current = request.data[0]['address']['cityCode']
         lat, longi = geocode_city(self.travel)
         request = amadeus.reference_data.locations.airports.get(
@@ -90,15 +95,11 @@ class Request(object):
     def get_all_cities():
         df = pd.read_csv('citylist.csv')
         city = df['name']
-
         id = df['country_id']
-
         wanted_cities = [city[i] for i in range(len(city)) if id[i] == 'country:43']
-
         return wanted_cities
 
-req = Request(current_city='Chicago', travel_city='Knoxville', num_people='2', st_date='2019-04-10', end_date='2019-04-15', ratings='5,4,3,2', max_fbudget=500)
 
-print(req.get_hotels())
-
-print(req.get_flight())
+req = Request(current_city='Chicago', travel_city='Knoxville', num_people='2', st_date='2019-04-10',
+              end_date='2019-04-15', ratings='5,4,3,2', max_fbudget=500)
+print(req.get_nearby_airports())

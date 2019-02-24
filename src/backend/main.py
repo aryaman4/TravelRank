@@ -3,6 +3,7 @@ from src.backend.Request import Request
 from src.backend.Rank import Rank
 from src.backend.utils import generate_hotel_dict, generate_flight_dict, sort_y_pred
 from src.backend.regression import predict_rank
+import random
 
 class Main(object):
 
@@ -17,6 +18,7 @@ class Main(object):
 
     def get_output_list_ranked(self):
         city_list = Request.get_all_cities()
+        city_list = city_list[:10]
         self.fil.locations = city_list
         ranker = Rank(self.fil.request, self.fil)
         ranker.create_location_dict()
@@ -32,3 +34,15 @@ class Main(object):
         y_pred = predict_rank(x_vals[1:])
         x_pred, y_pred = sort_y_pred(x_vals, y_pred)
         return x_pred
+
+    def get_other_ten(self, city_list):
+        item_list = list()
+        item = None
+        for i in range(10):
+            random.choice(city_list)
+
+    def return_json(self):
+        x_pred = self.get_output_list_ranked()
+        location_list = list()
+        for pred in x_pred:
+            name = pred[0]

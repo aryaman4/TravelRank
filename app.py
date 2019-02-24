@@ -40,6 +40,9 @@ class SearchForm(Form):
 		validators.required(),
 		check_checkin_date,
 		check_checkout_date(min=checkin)], format = '%Y-%m-%d')
+	max_traveltime = IntegerField('Maximum Travel Time in hours', [
+		validators.required(),
+		validators.NumberRange(min=1, message='Maximum hours should atleast be 1')])
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -52,6 +55,7 @@ def index():
 		people = form.people.data
 		checkin = form.checkin.data
 		checkout = form.checkout.data
+		max_traveltime = form.max_traveltime.data
 
 		return redirect(url_for('results'))
 
@@ -73,7 +77,9 @@ class FilterForm(Form):
 		validators.required(),
 		check_checkin_date,
 		check_checkout_date(min=checkin)], format = '%Y-%m-%d')
-	rating = SelectField('Hotel Rating', choices=[(rating, rating) for rating in levels])
+	max_traveltime = IntegerField('Maximum Travel Time in hours', [
+		validators.required(),
+		validators.NumberRange(min=1, message='Maximum hours should atleast be 1')])
 
 
 @app.route('/results', methods=['GET', 'POST'])
@@ -86,7 +92,7 @@ def results():
 		people = form.people.data
 		checkin = form.checkin.data
 		checkout = form.checkout.data
-		rating = form.rating.data
+		max_traveltime = form.max_traveltime.data
 
 		return redirect(url_for('results'))
 

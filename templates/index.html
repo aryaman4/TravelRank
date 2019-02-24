@@ -22,7 +22,7 @@ aMaDeUs
 	<br>
 </div>
 
-<div class="container" style="padding-bottom:13em">
+<div class="container" style="padding-bottom:9em">
 	<form class="" method="POST" action="/">
 		<dl>
 			{{ form.csrf_token }}
@@ -31,7 +31,8 @@ aMaDeUs
 			{{ wtf.form_field(form.people) }}
 			{{ wtf.form_field(form.checkin) }}
 			{{ wtf.form_field(form.checkout) }}
-			<button type="button" class="btn btn-primary">Search</button>
+			{{ wtf.form_field(form.max_traveltime) }}
+			<button type="submit" class="btn btn-primary">Search</button>
 		</dl>
 	</form>
 </div>

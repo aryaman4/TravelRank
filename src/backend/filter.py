@@ -1,5 +1,5 @@
 from src.backend.Request import Request
-from src.backend.utils import get_formatted_date, get_time, get_price
+from src.backend.utils import get_formatted_date, get_flight_price, get_hotel_price
 
 class Filter(object):
 
@@ -31,9 +31,9 @@ class Filter(object):
             flight_list = self.request.get_flight()
             possible_flights = list()
             for offer in flight_list:
-                price = get_price(offer['offerItems'])
+                price = get_flight_price(offer)
                 if price <= travel_budget:
-                    possible_flights.append(offer['offerItems'])
+                    possible_flights.append(offer)
             if len(possible_flights) > 0:
                 self.possible_flights[location] = possible_flights
 
@@ -43,6 +43,12 @@ class Filter(object):
             self.request.travel = location.name
             hotel_list = self.request.get_hotels()
             possible_hotels = list()
+            for offer in hotel_list:
+                price = get_hotel_price(offer)
+                if price <= lodging_budget:
+                    possible_hotels.append(offer)
+            if len(possible_hotels) > 0:
+                self.possible_hotels[location] = possible_hotels
 
     def filter(self):
         travel, lodging = self.split_budget()
@@ -51,3 +57,6 @@ class Filter(object):
             if location not in self.possible_flights.keys():
                 self.locations.remove(location)
         self.filter_by_lodging(lodging)
+        for location in self.locations:
+            if location not in self.possible_hotels.keys():
+                self.locations.remove(location)

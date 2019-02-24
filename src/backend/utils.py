@@ -13,8 +13,8 @@ def geocode_city(city_name):
 
 
 def get_time(offer):
-    departure_seg = offer[0]['services'][0]['segments']
-    return_seg = offer[0]['services'][1]['segments']
+    departure_seg = offer['offerItems'][0]['services'][0]['segments']
+    return_seg = offer['offerItems'][0]['services'][1]['segments']
     departure_time = 0.0
     arrival_time = 0.0
     for segment in departure_seg:
@@ -26,9 +26,28 @@ def get_time(offer):
     return (departure_time, arrival_time)
 
 
-def get_price(offer):
-    return float(offer[0]['price']['total'])
+def generate_flight_dict(flights):
+    flight_dict = {}
+    offers = [flight for flight in flights]
+    prices = [get_flight_price(offer) for offer in flights]
+    times = [get_time(offer) for offer in flights]
+    for i in range(len(offers)):
+        flight_dict[offers[i]] = (prices[i], times[i])
+    return flight_dict
 
+def generate_hotel_dict(hotels):
+    names = [hotels[i]['name'] for i in range(len(hotels))]
+    totals = [get_hotel_price(offer) for offer in hotels]
+    hotel_dict = {}
+    for i in range(len(names)):
+        hotel_dict[names[i]] = totals[i]
+    return hotel_dict
+
+def get_flight_price(offer):
+    return offer['offerItems'][0]['pricePerAdult']
+
+def get_hotel_price(offer):
+    return offer['offers'][0]['price']['total']
 
 def convert_to_float(time_str):
     days = int(time_str[0: time_str.find("DT")])

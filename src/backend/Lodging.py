@@ -28,7 +28,7 @@ class Lodging(object):
         totals = [hotels[i]['offers'][0]['price']['total'] for i in range(len(hotels))]
         hotel_dict = {}
         for i in range(len(names)):
-            hotel_dict[hotels[i]] = totals[i]
+            hotel_dict[names[i]] = totals[i]
         return hotel_dict
 
 

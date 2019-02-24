@@ -27,7 +27,7 @@ def get_time(offer):
 
 
 def get_price(offer):
-    return 0
+    return float(offer[0]['price']['total'])
 
 
 def convert_to_float(time_str):

@@ -7,7 +7,7 @@ def get_dataset():
     return list(), list()
 
 
-def predict(x_values):
+def predict_rank(x_values):
     exists = os.path.isfile('src/backend/regressor_data.pkl')
 
     regressor = None

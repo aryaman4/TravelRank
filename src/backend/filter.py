@@ -1,5 +1,5 @@
 from src.backend.Request import Request
-from src.backend.utils import get_formatted_date, get_flight_price, get_hotel_price, get_hotel_rating
+from src.backend.utils import get_flight_price, get_hotel_price, get_hotel_rating
 
 class Filter(object):
 
@@ -11,7 +11,7 @@ class Filter(object):
         self.end = end
         self.locations = locations
         self.rating = rating
-        self.request = Request(current_city=self.current, num_people=str(num_people), st_date=get_formatted_date(self.start), end_date=get_formatted_date(self.end))
+        self.request = Request(current_city=self.current, num_people=str(num_people), st_date=self.start, end_date=self.end)
         self.possible_flights = {}
         self.possible_hotels = {}
 

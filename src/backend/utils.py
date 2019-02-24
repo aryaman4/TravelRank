@@ -1,11 +1,4 @@
-import datetime
 import requests
-
-
-def get_formatted_date(date):
-    string_date = date.year + "-" + date.month + "-" + date.day
-    return string_date
-
 
 def geocode_city(city_name):
         json = requests.get('https://nominatim.openstreetmap.org/search?q=%s&format=json&polygon=1&addressdetails=1'%(city_name)).json()
@@ -25,7 +18,6 @@ def get_time(offer):
         arrival_time += convert_to_float(duration_str)
     return departure_time, arrival_time
 
-
 def generate_flight_dict(flights):
     flight_dict = {}
     offers = [flight for flight in flights]
@@ -44,10 +36,8 @@ def generate_hotel_dict(hotels):
         hotel_dict[names[i]] = totals[i]
     return hotel_dict
 
-
 def get_flight_price(offer):
     return offer['offerItems'][0]['pricePerAdult']
-
 
 def get_hotel_price(offer):
     return offer['offers'][0]['price']['total']
@@ -67,3 +57,16 @@ def convert_to_time_format(time_val):
     mins = int(round((time_val % 1) * 60))
     hrs = int(time_val)
     return hrs, mins
+
+def sort_y_pred(x, y):
+    for i in range(len(y) - 1):
+        for j in range(i, len(y)):
+            if y[j] < y[i]:
+                temp = y[j]
+                y[j] = y[i]
+                y[i] = temp
+
+                temp = x[j]
+                x[j] = x[i]
+                x[i] = temp
+    return x, y

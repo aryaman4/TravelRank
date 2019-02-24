@@ -40,14 +40,3 @@ class Rank(object):
                     min_price = v
                     best_hotel = k
             self.location_dict[city] = (best_hotel, best_flight)
-
-
-
-
-
-
-
-
-
-
-

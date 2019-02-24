@@ -1,5 +1,6 @@
 from amadeus import Client
 from src.backend.utils import geocode_city
+import pandas as pd
 amadeus = Client(
     client_id='ihBJLkd2SDQFIp7MvlHDcAExAFaBiN1n',
     client_secret='XJ2JSLSG0bL5Mky6'
@@ -73,6 +74,16 @@ class Request(object):
             longitude = long
         )
         return [request.data[i]['iataCode'] for i in range(len(request.data))]
+    def get_all_cities(self):
+        df = pd.read_csv('citylist.csv')
+        city = df['name']
+
+        id = df['country_id']
+
+        wanted_cities = [city[i] for i in range(len(city)) if id[i] == 'country:43']
+
+        return wanted_cities
+
 req = Request(current_city='Chicago', travel_city='Knoxville', num_people='2', st_date='2019-04-10', end_date='2019-04-15', ratings='5,4,3,2', max_fbudget=500)
 
 print(req.get_hotels())

@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% extends "bootstrap/base.html" %}
+
+{% block body %}
+	{% from "includes/_formhelpers.html" import render_field %}
+	<form method="POST" action="">
+		<div class="form-group">
+			{{ render_field(form.budget, class_="form-control") }}
+		</div>
+		<div class="form-group">
+			{{ render_field(form.budget, class_="form-control") }}
+		</div>
+		<div class="form-group">
+			{{ render_field(form.people, class_="form-control") }}
+		</div>
+		<div class="form-group">
+			{{ render_field(form.checkin, class_="form-control") }}
+		</div>
+		<div class="form-group">
+			{{ render_field(form.checkout, class_="form-control") }}
+		</div>
+	</form>
+{% endblock %}

@@ -1,0 +1,32 @@
+body {
+	color: #000;
+	background-color: #134;
+}
+
+#navbar {
+	overflow: hidden;
+	background-color: #fff;
+	padding: 10em 40em 10em;
+	transition: 0.4s;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	z-index: 99;
+}
+
+#navbar #logo {
+	transition: 0.4s;
+}
+
+
+#logo {
+	width: 80%;
+	height: 100%;
+	vertical-align: middle;
+}
+
+@media screen and (max-width: 580px) {
+	#navbar {
+		padding: 20px 10px !important;
+	}
+}

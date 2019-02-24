@@ -1,4 +1,4 @@
-from amadeus import Client
+from amadeus import Client, ResponseError
 from src.backend.utils import geocode_city
 import pandas as pd
 
@@ -32,26 +32,33 @@ class Request(object):
     def set_max_hbudget(self, hbudget):
         self.max_hbudget = hbudget
 
+    def generate_city_code(self, name):
+        lat, longi = geocode_city(name)
+        request = amadeus.reference_data.locations.airports.get(
+            latitude=lat,
+            longitude=longi
+        )
+        return request.data[0]['address']['cityCode']
+
     def get_hotels(self):
         lat, longi = geocode_city(self.travel)
         request = amadeus.reference_data.locations.airports.get(
             latitude=lat,
             longitude=longi
         )
+        toTravel = ""
+        print(self.travel)
         for i in range(len(request.data)):
             if request.data[i]['address']['cityName'].lower() == self.travel.lower():
                 toTravel = request.data[i]['address']['cityCode']
-        if (len(self.travel) > 3):
+        if toTravel == '' and len(request.data) != 0:
             toTravel = request.data[0]['address']['cityCode']
         request = amadeus.shopping.hotel_offers.get(
-            cityCode= toTravel,
-            checkInDate = self.st_date,
-            checkOutDate = self.end_date,
-            currency = self.currency,
-            adults = self.num_people,
-            ratings= self.ratings or '',
-            radius = 50,
-            priceRange = self.max_hbudget or ''
+            cityCode=toTravel,
+            checkInDate=self.st_date,
+            checkOutDate=self.end_date,
+            currency=self.currency,
+            adults=self.num_people
         )
         return request.data
 
@@ -73,14 +80,14 @@ class Request(object):
         )
         self.travel = request.data[0]['address']['cityCode']
         request = amadeus.shopping.flight_offers.get(
-            origin = self.current,
-            destination = self.travel,
-            departureDate = self.st_date,
-            returnDate = self.end_date or '',
-            adults = self.num_people,
-            currency = self.currency,
-            maxPrice = self.max_fbudget*int(self.num_people)
+            origin=self.current,
+            destination=self.travel,
+            departureDate=self.st_date,
+            returnDate=self.end_date or '',
+            adults=self.num_people,
+            currency=self.currency
         )
+
         return request.data
 
     def get_nearby_airports(self):

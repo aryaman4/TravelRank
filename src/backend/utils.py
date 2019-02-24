@@ -1,8 +1,6 @@
 import datetime
 import requests
 
-from src.backend.flight import Flight
-
 
 def get_formatted_date(date):
     string_date = date.year + "-" + date.month + "-" + date.day
@@ -30,7 +28,7 @@ def get_time(offer):
 
 def generate_flight_dict(flights):
     flight_dict = {}
-    offers = [Flight(flight) for flight in flights]
+    offers = [flight for flight in flights]
     prices = [get_flight_price(offer) for offer in flights]
     times = [get_time(offer) for offer in flights]
     for i in range(len(offers)):
@@ -39,8 +37,7 @@ def generate_flight_dict(flights):
 
 
 def generate_hotel_dict(hotels):
-    print(hotels)
-    names = [hotels[i]['hotel']['name'] for i in range(len(hotels))]
+    names = [hotels[i]['name'] for i in range(len(hotels))]
     totals = [get_hotel_price(offer) for offer in hotels]
     hotel_dict = {}
     for i in range(len(names)):
@@ -49,7 +46,7 @@ def generate_hotel_dict(hotels):
 
 
 def get_flight_price(offer):
-    return offer['offerItems'][0]['pricePerAdult']['total']
+    return offer['offerItems'][0]['pricePerAdult']
 
 
 def get_hotel_price(offer):

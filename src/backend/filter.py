@@ -1,5 +1,5 @@
 from Request import Request
-from utils import get_formatted_date
+from utils import get_formatted_date, get_time, get_price
 
 class Filter(object):
 
@@ -26,7 +26,10 @@ class Filter(object):
         self.request.fbudget = travel_budget
         for location in self.locations:
             self.request.travel = location.name
-            flight_json = self.request.get_flight()
+            flight_list = self.request.get_flight()
+            for offer in flight_list:
+                departure_time, arrival_time = get_time(offer)
+                price_per_adult = get_price(offer)
 
     def filter_by_lodging(self, lodging_budget):
         pass

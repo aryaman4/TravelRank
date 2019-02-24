@@ -21,8 +21,15 @@ class RequestTest(unittest.TestCase):
         self.assertEqual(json[0]['hotel']['cityCode'], 'TYS')
 
     def test_get_flights(self):
-        pass
+        req = Request(current_city='Chicago', travel_city='Knoxville', num_people='2', st_date='2019-04-10',
+                      end_date='2019-04-15', ratings='5,4,3,2', max_fbudget=500)
+
+        json = req.get_flight()
+        self.assertEqual(json[0]['id'], '1550981718711-1240260075')
 
     def test_get_airports(self):
-        pass
+        req = Request(current_city='Chicago', travel_city='Knoxville', num_people='2', st_date='2019-04-10',
+                      end_date='2019-04-15', ratings='5,4,3,2', max_fbudget=500)
+
+        self.assertEqual(req.get_nearby_airports(), ['ORD', 'MDW', 'DTW', 'MKE', 'STL', 'IND', 'CVG', 'CLE', 'CMH', 'GRR'])
 

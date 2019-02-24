@@ -23,7 +23,7 @@ def get_time(offer):
     for segment in return_seg:
         duration_str = segment['flightSegment']['duration']
         arrival_time += convert_to_float(duration_str)
-    return (departure_time, arrival_time)
+    return departure_time, arrival_time
 
 
 def generate_flight_dict(flights):
@@ -35,6 +35,7 @@ def generate_flight_dict(flights):
         flight_dict[offers[i]] = (prices[i], times[i])
     return flight_dict
 
+
 def generate_hotel_dict(hotels):
     names = [hotels[i]['name'] for i in range(len(hotels))]
     totals = [get_hotel_price(offer) for offer in hotels]
@@ -43,11 +44,14 @@ def generate_hotel_dict(hotels):
         hotel_dict[names[i]] = totals[i]
     return hotel_dict
 
+
 def get_flight_price(offer):
     return offer['offerItems'][0]['pricePerAdult']
 
+
 def get_hotel_price(offer):
     return offer['offers'][0]['price']['total']
+
 
 def convert_to_float(time_str):
     days = int(time_str[0: time_str.find("DT")])
@@ -55,6 +59,7 @@ def convert_to_float(time_str):
     mins = int(time_str[time_str.find("H") + 1: time_str.find("M")])
     total_hrs = float((days * 24) + (hours) + (mins / 60.0))
     return total_hrs
+
 
 def convert_to_time_format(time_val):
     mins = int(round((time_val % 1) * 60))

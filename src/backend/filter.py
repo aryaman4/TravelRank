@@ -1,8 +1,8 @@
 from src.backend.Request import Request
 from src.backend.utils import get_formatted_date, get_flight_price, get_hotel_price
 
-class Filter(object):
 
+class Filter(object):
     def __init__(self, current_city, num_people, start, end, locations, mode=None, time=None, rating=None, budget=None, travel_lodging=None):
         self.budget = budget
         self.current = current_city
@@ -22,7 +22,7 @@ class Filter(object):
             self.combined = self.factor * self.budget
         travel = 0.6 * self.combined
         lodging = 0.4 * self.combined
-        return (travel, lodging)
+        return travel, lodging
 
     def filter_by_travel(self, travel_budget):
         self.request.max_fbudget = travel_budget

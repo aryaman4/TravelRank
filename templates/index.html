@@ -6,13 +6,23 @@ aMaDeUs
 {% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-light bg-light">
-  <a class="navbar-brand" href="#">
-    <img src="/docs/4.3/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+<nav class="navbar navbar-light bg-light sticky-top" style="background-color:#09276B">
+  <a class="navbar-brand" href="#" style="color:#fff">
     Bootstrap
   </a>
 </nav>
-<div class="container">
+
+<div class="container" style="width:70%; padding:12em 0em">
+	<h1 style="font-size:3em; text-align:center">Plan a trip</h1>
+	<h1 style="font-size:3em; text-align:center">With Us</h1>
+</div>
+
+<div class="container" style="background-color:#09276B; margin-bottom: 4em; width:100%">
+	<br>
+	<br>
+</div>
+
+<div class="container" style="padding-bottom:13em">
 	<form class="" method="POST" action="/">
 		<dl>
 			{{ form.csrf_token }}

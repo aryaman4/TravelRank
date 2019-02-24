@@ -37,7 +37,8 @@ def generate_flight_dict(flights):
 
 
 def generate_hotel_dict(hotels):
-    names = [hotels[i]['name'] for i in range(len(hotels))]
+    print(hotels)
+    names = [hotels[i]['hotel']['name'] for i in range(len(hotels))]
     totals = [get_hotel_price(offer) for offer in hotels]
     hotel_dict = {}
     for i in range(len(names)):

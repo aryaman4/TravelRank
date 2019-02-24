@@ -1,7 +1,7 @@
 from amadeus import Client, ResponseError
 from src.backend.utils import geocode_city
 import pandas as pd
-
+import time
 API_KEY = 'ihBJLkd2SDQFIp7MvlHDcAExAFaBiN1n' #replace for use
 API_SECRET = 'XJ2JSLSG0bL5Mky6'
 amadeus = Client(
@@ -32,12 +32,15 @@ class Request(object):
     def set_max_hbudget(self, hbudget):
         self.max_hbudget = hbudget
 
-    def generate_city_code(self, name):
+    @staticmethod
+    def generate_city_code(name):
         lat, longi = geocode_city(name)
         request = amadeus.reference_data.locations.airports.get(
             latitude=lat,
             longitude=longi
         )
+        if len(request.data) == 0:
+            return 'f'
         return request.data[0]['address']['cityCode']
 
     def get_hotels(self):
@@ -105,8 +108,3 @@ class Request(object):
         id = df['country_id']
         wanted_cities = [city[i] for i in range(len(city)) if id[i] == 'country:43']
         return wanted_cities
-
-
-req = Request(current_city='Chicago', travel_city='Knoxville', num_people='2', st_date='2019-04-10',
-              end_date='2019-04-15', ratings='5,4,3,2', max_fbudget=500)
-print(req.get_nearby_airports())

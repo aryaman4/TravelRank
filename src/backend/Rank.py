@@ -1,5 +1,5 @@
 from src.backend.utils import *
-
+from src.backend.Request import Request
 class Rank(object):
     def __init__(self, req, filter):
         self.request = req
@@ -9,10 +9,12 @@ class Rank(object):
     def create_location_dict(self):
         #self.fil.filter()
         code_dict = {}
+        count = 0
         for city in self.fil.locations:
             try:
                 self.request.set_travel_city(city)
-                code = geocode_city(city)
+                code = Request.generate_city_code(city)
+                print(code)
                 if code in code_dict.keys():
                     continue
                 code_dict[code] = 1
@@ -46,6 +48,9 @@ class Rank(object):
                         min_price = v
                         best_hotel = (k, v)
                 self.location_dict[city] = (best_hotel, best_flight)
+                if count == 10:
+                    break
+                count += 1
             except Exception:
                 continue
 

@@ -1,5 +1,5 @@
 from src.backend.Request import Request
-from src.backend.utils import get_flight_price, get_hotel_price, get_hotel_rating
+from src.backend.utils import get_formatted_date, get_flight_price, get_hotel_price, get_hotel_rating
 
 class Filter(object):
 

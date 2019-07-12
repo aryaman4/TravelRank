@@ -18,7 +18,8 @@ The following is a contributing guide for the TravelRank project which includes 
 We have used the Amadeus self-service travel API and the Nominatim Geocoding API.
 The Geocodes are generated with a simple GET request to the [base URL](https://nominatim.openstreetmap.org/search?q=KEY&format=json&polygon=1&addressdetails=1)
 
-To use the Amadeus API with the project, generate the API key and secret using the instructions [here](https://developers.amadeus.com/quick-start-guide/category?id=97&durl=335&parentId=NaN). Replace the API_KEY and API_SECRET in the requests class with those generated. 
+To use the Amadeus API with the project, generate the API key and secret using the instructions [here](https://developers.amadeus.com/quick-start-guide/category?id=97&durl=335&parentId=NaN). Replace the API_KEY and API_SECRET in the requests class with those generated.
+Instructions to use the Amadeus API can be found [here](https://github.com/amadeus4dev/amadeus-python).
 
 ##Dependencies
 You will need to install certain packages like Pandas, Amadeus SDK for Python, scikit-learn, Pickle and the Python requests library for this project.

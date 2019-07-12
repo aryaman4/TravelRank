@@ -1,0 +1,46 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}
+aMaDeUs
+{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-light bg-light sticky-top" style="background-color:#09276B">
+  <a class="navbar-brand" href="#" style="color:#fff">
+    Bootstrap
+  </a>
+</nav>
+<div class="container col-md-3" style="height=50%"">
+	<form class="" method="POST" action="/">
+		<dl>
+			{{ form.csrf_token }}
+			{{ wtf.form_field(form.current_city) }}
+			{{ wtf.form_field(form.budget) }}
+			{{ wtf.form_field(form.people) }}
+			{{ wtf.form_field(form.checkin) }}
+			{{ wtf.form_field(form.checkout) }}
+			{{ wtf.form_field(form.max_traveltime) }}
+			<button type="submit" class="btn btn-primary">Search</button>
+		</dl>
+	</form>
+</div>
+<div class="container col-md-8" style="floar: right; padding:0px 10px">
+	{% for item in items %}
+	<div class="card">
+  <div class="card-body">
+    Name: {{item.name}}
+		Departure Flight: {{item.flight.departure.name}}
+		Departure Flight Date and Time: {{item.flight.departure.dateAndtime}}
+		Departure Flight Duration: {{item.flight.departure.duration}}
+		Arrival Flight: {{item.flight.arrival.name}}
+		Arrival Flight Date and Time: {{item.flight.arrival.dateAndtime}}
+		Arrival Flight Duration: {{item.flight.arrival.duration}}
+		Price: {{item.price}}
+		Hotel: {{item.hotel.name}}. {{item.hotel.description}}
+		Hotel Price: {{item.hotel.price}}
+  </div>
+	</div>
+	{% endfor %}
+</div>
+{% endblock %}

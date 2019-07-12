@@ -1,0 +1,10 @@
+name : TravelRank
+dependencies:
+  -python=3
+  -pandas
+  -numpy
+  -pip
+  -pytest
+  -pickle
+  -pip:
+    -scikit-learn
